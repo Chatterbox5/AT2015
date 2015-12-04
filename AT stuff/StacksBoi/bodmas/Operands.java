@@ -8,7 +8,13 @@ public class Operands {
 	
 	public static int operate(String str)
 	{
-		Stack 
-		while()
+		String queue = "";
+		Stack nums = new Stack<String>();
+		Stack ops = new Stack<String>();
+		
+		for(int x = 0; x < str.length(); x++)
+		{
+			if(str.indexOf(x).equals(" "));
+		}
 	}
 }
