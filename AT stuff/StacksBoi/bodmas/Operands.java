@@ -16,19 +16,61 @@ public class Operands {
 		
 		for(int x = 0; x < arr.length; x++)
 		{
-			if(x%2 != 0)//number
-				nums.push(arr[x]);
+			String s = arr[x];
+			if(!isOperator(s))//number
+				nums.push(s);
 			else
 			{
-				if(ops.empty() || precedence((String)ops.peek(), arr[x]))
-					
+				if(ops.empty())
+					ops.push(s);
+				else
+					if(precedence(s)>precedence(ops.peek()))
+						ops.push(s);
+					else
+												
 			}
 		}
 	}
 	
-	public boolean precedence(String stackTop, String next)
+	private void compute(Stack nums, Stack ops)
 	{
-		int top, n;
-		if(stackTop)
+		while(lastInStack(nums))
+		{
+			
+		}
+	}
+	
+	private boolean lastInStack(Stack s)
+	{
+		String temp = (String)s.pop();
+		if(s.empty())
+		{
+			s.push(temp);
+			return true;
+		}
+		s.push(temp);
+		return false;
+	}
+	private int precedence(String q)
+	{
+		int s = -1;
+		if(q.equals("("))
+			s = 0;
+		else if(q.equals(")"))
+			s = 1;
+		else if(q.equals("^"))
+			s = 2;
+		else if(q.equals("*"))
+			s = 3;
+		else if(q.equals("/"))
+			s = 3;
+		else if(q.equals("+") || q.equals("-"))
+			s = 4;
+		return s;
+	}
+	
+	private boolean isOperator(String s)
+	{
+		return !s.matches("-?[0-9]+(\\.[0-9]*)?");		
 	}
 }
