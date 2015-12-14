@@ -1,45 +1,68 @@
 package bodmas;
 import java.util.Stack;
 public class Operands {
-	public static void main(String[] args)
-	{
-		
-	}
-	
+
 	public int operate(String str)
 	{
-		String queue = "";
-		String[] arr=str.split(" ");
-		Stack nums = new Stack<String>();
-		Stack ops = new Stack<String>();
-		int sum;
-		
-		for(int x = 0; x < arr.length; x++)
-		{
-			String s = arr[x];
-			if(!isOperator(s))//number
-				nums.push(s);
-			else
-			{
-				if(ops.empty())
-					ops.push(s);
-				else
-					if(precedence(s)>precedence(ops.peek()))
-						ops.push(s);
-					else
-												
+
+		return rPN(shuntingYard(str));
+	}
+
+	private int rPN(String str){
+		String[] arr=str.split(" ");  
+		Stack<Integer> result = new Stack<Integer>();
+		for(int i=0; i<arr.length;i++){
+			if(!isOperator(arr[i]))
+				result.push(Integer.parseInt(arr[i]));
+			else{
+				int first=result.pop();
+				int sec=result.pop();
+				if(precedence(arr[i])==2){
+					result.push((int) Math.pow(first, sec));
+				}
+				else if(precedence(arr[i])==3&&isMult(arr[i])){
+					result.push(first*sec);
+				}
+				else if(precedence(arr[i])==3){
+					result.push(sec/first);
+				}
+				else if(precedence(arr[i])==4&&isAdd(arr[i])){
+					result.push(first+sec);
+				}
+				else if(precedence(arr[i])==4){
+					result.push(sec-first);
+				}
 			}
 		}
+
+		return result.pop();
 	}
-	
-	private void compute(Stack nums, Stack ops)
+
+	private String shuntingYard(String str)
 	{
-		while(lastInStack(nums))
-		{
-			
+		String rpn="";
+		String temp="";
+		String[] arr=str.split(" ");  
+		Stack<String> ops = new Stack<String>();
+
+		for(int i=0; i<arr.length;i++){
+			if(!isOperator(arr[i])){
+				rpn+=arr[i]+" ";
+			}
+			else{ 
+				if(!ops.isEmpty()&&(precedence(ops.peek())<precedence(arr[i]))){
+					while(!ops.empty())
+						rpn+=ops.pop()+" ";	
+					temp=arr[i];
+				}
+			}
+
+			if(isOperator(arr[i]))
+				ops.push(arr[i]);
 		}
+
+		return rpn+temp;
 	}
-	
 	private boolean lastInStack(Stack s)
 	{
 		String temp = (String)s.pop();
@@ -51,6 +74,15 @@ public class Operands {
 		s.push(temp);
 		return false;
 	}
+
+	private boolean isMult(String str){
+		return str.equals("*");
+	}
+
+	private boolean isAdd(String str){
+		return str.equals("+");
+	}
+
 	private int precedence(String q)
 	{
 		int s = -1;
@@ -68,7 +100,6 @@ public class Operands {
 			s = 4;
 		return s;
 	}
-	
 	private boolean isOperator(String s)
 	{
 		return !s.matches("-?[0-9]+(\\.[0-9]*)?");		
