@@ -2,106 +2,97 @@ package bodmas;
 import java.util.Stack;
 public class Operands {
 
-	public int operate(String str)
-	{
+	public static int notationToNum(String in){
+		if(in.contains("(")){
+			int open = in.indexOf("(");
+			int close = in.substring(open + 1).indexOf(")");
 
-		return rPN(shuntingYard(str));
+			String fixed = "";
+			fixed += in.substring(0, open) + notationToNum2(in.substring(open + 1, close)) + in.substring(open);
+			return notationToNum2(fixed);
+		}
+		//"3 * ( 4 + 2 ) + 5"
+		else
+			return notationToNum2(in);
+
 	}
+	private static int notationToNum2(String string) {
+		String[] str = string.split(" ");
+		Stack<Integer> numbers = new Stack<Integer>();
+		Stack<String> operators = new Stack<String>();
+		int sum = 0;
+		int i = 2;
 
-	private int rPN(String str){
-		String[] arr=str.split(" ");  
-		Stack<Integer> result = new Stack<Integer>();
-		for(int i=0; i<arr.length;i++){
-			if(!isOperator(arr[i]))
-				result.push(Integer.parseInt(arr[i]));
-			else{
-				int first=result.pop();
-				int sec=result.pop();
-				if(precedence(arr[i])==2){
-					result.push((int) Math.pow(first, sec));
-				}
-				else if(precedence(arr[i])==3&&isMult(arr[i])){
-					result.push(first*sec);
-				}
-				else if(precedence(arr[i])==3){
-					result.push(sec/first);
-				}
-				else if(precedence(arr[i])==4&&isAdd(arr[i])){
-					result.push(first+sec);
-				}
-				else if(precedence(arr[i])==4){
-					result.push(sec-first);
-				}
-			}
+		if(str.length < 2)
+			return Integer.parseInt(str[0]);
+		else{
+			numbers.add(Integer.parseInt(str[0]));
+			operators.add(str[1]);
 		}
 
-		return result.pop();
-	}
+		while ( i < str.length - 1) {
+			numbers.add(Integer.parseInt(str[i]));
+			i++;
 
-	private String shuntingYard(String str)
-	{
-		String rpn="";
-		String temp="";
-		String[] arr=str.split(" ");  
-		Stack<String> ops = new Stack<String>();
 
-		for(int i=0; i<arr.length;i++){
-			if(!isOperator(arr[i])){
-				rpn+=arr[i]+" ";
-			}
-			else{ 
-				if(!ops.isEmpty()&&(precedence(ops.peek())<precedence(arr[i]))){
-					while(!ops.empty())
-						rpn+=ops.pop()+" ";	
-					temp=arr[i];
-				}
+			while(!operators.isEmpty() && !isHigherPrecedence(str[i], operators.peek())){
+				sum = evaluate(numbers, operators);
+				numbers.add(sum);
 			}
 
-			if(isOperator(arr[i]))
-				ops.push(arr[i]);
+			operators.add(str[i]);
+			i++;
 		}
 
-		return rpn+temp;
-	}
-	private boolean lastInStack(Stack s)
-	{
-		String temp = (String)s.pop();
-		if(s.empty())
-		{
-			s.push(temp);
-			return true;
+		numbers.add(Integer.parseInt(str[i]));
+		while(!operators.isEmpty()){
+			sum = evaluate(numbers, operators);
+			numbers.add(sum);
 		}
-		s.push(temp);
-		return false;
+
+
+		return sum;
 	}
 
-	private boolean isMult(String str){
-		return str.equals("*");
+
+
+
+	private static int evaluate(Stack<Integer> nums, Stack<String> operators) {
+		String operator = operators.pop();
+		int second = nums.pop();
+		int first = nums.pop();
+
+		if (operator.equals("+"))
+			return first + second;
+		else if (operator.equals("-"))
+			return first - second;
+		else if (operator.equals("*"))
+			return first * second;
+		else if (operator.equals("/"))
+			return first / second;
+		else if (operator.equals("^"))
+			return (int) Math.pow(first, second);
+
+		return 0;
+
 	}
 
-	private boolean isAdd(String str){
-		return str.equals("+");
+
+
+	private static boolean isHigherPrecedence(String a, String b) {
+		int x = enumerateOperator(a);
+		int y = enumerateOperator(b);
+
+		return x >= y;
 	}
 
-	private int precedence(String q)
-	{
-		int s = -1;
-		if(q.equals("("))
-			s = 0;
-		else if(q.equals(")"))
-			s = 1;
-		else if(q.equals("^"))
-			s = 2;
-		else if(q.equals("*"))
-			s = 3;
-		else if(q.equals("/"))
-			s = 3;
-		else if(q.equals("+") || q.equals("-"))
-			s = 4;
-		return s;
-	}
-	private boolean isOperator(String s)
-	{
-		return !s.matches("-?[0-9]+(\\.[0-9]*)?");		
+	private static int enumerateOperator(String a) {
+
+		if (a.equals("+") || a.equals("-")) {
+			return 1;
+		} else if (a.equals("*") || a.equals("/")) {
+			return 2;
+		} else
+			return 3;
 	}
 }

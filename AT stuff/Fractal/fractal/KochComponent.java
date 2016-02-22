@@ -24,90 +24,81 @@ public class KochComponent extends JComponent
 
 { 
 
-   private int numIterations; 
+	private int numIterations; 
 
-   private int length; 
+	private int length; 
 
-public KochComponent(int iters, int aLength)
+	public KochComponent(int iters, int aLength)
 
-   {
+	{
+		numIterations = iters;
 
-     
+		length = aLength;
 
-      numIterations = iters;
+	}
 
-      length = aLength;
 
-      
 
-  
+	public void paintComponent(Graphics g)
 
-      
+	{
 
-   }
+		Graphics2D g2 = (Graphics2D) g;
 
-   
+		KochLine koch = new KochLine();
 
-   public void paintComponent(Graphics g)
+		int x1 = 10;
 
-   {
+		int y1 = length / 2;
 
-      Graphics2D g2 = (Graphics2D) g;
+		int x2 = x1 + length;
 
-      KochLine koch = new KochLine();
+		int y2 = y1;
 
-      int x1 = 10;
+		int x3 = x1 + (length / 2);
 
-      int y1 = length / 2;
+		int y3 = (y1 +length);
 
-      int x2 = x1 + length;
+		koch.draw(g2, numIterations, x1, y1, x2, y2);
 
-      int y2 = y1;
+		koch.draw(g2, numIterations, x2, y2, x2, y3);
 
-      int x3 = x1 + (length / 2);
+		koch.draw(g2, numIterations, x2, y3, x1, y1);
 
-      int y3 = (y1 +length);
+	}
 
-      koch.draw(g2, numIterations, x1, y1, x2, y2);
 
-      koch.draw(g2, numIterations, x2, y2, x2, y3);
 
-      koch.draw(g2, numIterations, x2, y3, x1, y1);
+	public static void main(String[] args)
 
-   }
+	{
 
-   
+		JFrame frame = new JFrame();
 
-   public static void main(String[] args)
+		final int FRAME_WIDTH = 360;
 
-   {
+		final int FRAME_HEIGHT = 500;
 
-      JFrame frame = new JFrame();
+		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 
-      final int FRAME_WIDTH = 360;
+		frame.setTitle("Koch Snowflake");
 
-      final int FRAME_HEIGHT = 500;
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-      frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		String input = JOptionPane.showInputDialog(null, "Number of iterations");
 
-      frame.setTitle("Koch Snowflake");
+		if (input == null)
 
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			System.exit(0);
 
-      String input = JOptionPane.showInputDialog(null, "Number of iterations");
+		int iterations = Integer.parseInt(input);
 
-      if (input == null)
+		KochComponent component = new KochComponent(iterations, 300);
 
-         System.exit(0);
+		frame.add(component);
 
-      int iterations = Integer.parseInt(input);
+		frame.setVisible(true);
 
-      KochComponent component = new KochComponent(iterations, 300);
-
-      frame.add(component);
-
-      frame.setVisible(true);
-
-   }
+	}
 
 }
