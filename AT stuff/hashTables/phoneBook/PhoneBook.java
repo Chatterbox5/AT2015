@@ -1,17 +1,27 @@
 package phoneBook;
 
+import java.util.Hashtable;
+import java.util.LinkedList;
+
+
 public class PhoneBook {
 
+	private Hashtable<Integer, LinkedList<PhoneEntry>> table;
+	private int numSlots;
+	
 	public PhoneBook(){
-
+		numSlots=10;
+		table= new Hashtable<Integer, LinkedList<PhoneEntry>>();
 	}
 
 	public PhoneBook(int numSlots){
-
+		this.numSlots=numSlots;
+		table= new Hashtable<Integer, LinkedList<PhoneEntry>>();
 	}
 
-	public void add(){
+	public void add(Object obj){
 
+		
 	}
 	
 	public void display(){
