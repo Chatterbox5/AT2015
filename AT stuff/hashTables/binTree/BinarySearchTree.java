@@ -96,6 +96,13 @@ public class BinarySearchTree
 	
 	
 	//search
+	public boolean search(TreeNode tree, Comparable c){
+		if(tree==null)
+			return false;
+		if(tree.equals(c))
+			return true;
+		return (search(tree.getLeft(),c))||(search(tree.getRight(),c));
+	}
 	
 	//maxNode
 	
