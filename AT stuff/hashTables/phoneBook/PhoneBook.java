@@ -1,84 +1,148 @@
 package phoneBook;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
-public class PhoneBook extends Object{
+import students.ClubMap;
+import students.Student;
 
-	private Hashtable<Integer, LinkedList<PhoneEntry>> data;
-	private int num = 0;
-	public PhoneBook() {
-		this(5);
-	}
-	
-	public PhoneBook(int numSlots) {
-		data = new Hashtable<Integer, LinkedList<PhoneEntry>>();
-		num = numSlots;
-	}
+public class PhoneBook {
 
-	public void load() throws IOException {
-		BufferedReader k = new BufferedReader(new FileReader(new File("hashTables/phoneBook/phone.txt")));
+	private HashMap<Integer, LinkedList<PhoneEntry>> map;
 
-		while(k.ready()) {
-			Scanner s = new Scanner(k.readLine());
-			add(new PhoneEntry(s.next(), s.next()));
+	public PhoneBook(){
+		map = new HashMap<Integer, LinkedList<PhoneEntry>>();
 
+		for (int i = 0; i < 10; i++) {
+			map.put(i, new LinkedList<PhoneEntry>());
 		}
 	}
-	
-	public void add(PhoneEntry obj) {
-		int bucket = obj.hashCode() % num;
-		if(data.containsKey(bucket))
-			data.get(bucket).add(obj);
-		else {
-			LinkedList<PhoneEntry> list = new LinkedList<PhoneEntry>();
-			list.add(obj);
-			list.sort((x,y)->x.getName().compareTo(y.getName()));
-			data.put(bucket, list);
-		}
-	}
-	public void display() {
-		for(int s : data.keySet()) {
-			System.out.println("Bucket: "+ s);
-			System.out.println(data.get(s).toString());
-			
-		}
+
+	public PhoneBook(int numBuckets){
+		map = new HashMap<Integer, LinkedList<PhoneEntry>>();
+
+		for (int i = 0; i < numBuckets; i++) 
+			map.put(i, new LinkedList<PhoneEntry>());
 
 	}
-	
-	public int getCapacity() {
-		return data.size();
+
+	public void add(PhoneEntry rock){
+		int bucket = Math.abs(rock.hashCode())%map.size();
+
+		LinkedList<PhoneEntry> list = map.get(Math.abs(bucket));
+		list.add(rock);
+		list.sort(null);
+
+		map.put(bucket, list);
 	}
-	
-	public int getSize() {
-		int size = 0;
-		for(int s : data.keySet())
-			size += data.get(s).size();
-		return size;
+
+	public int getCapacity(){
+		return map.keySet().size();
 	}
-	
-	public int getNullBuckets() {
-		int size = 0;
-		for(LinkedList<PhoneEntry> ll : data.values())
-			size += Optional.of(ll).isPresent() ? 1 : 0;
-		return size;
+
+	public int getSize(){
+		int ret = 0;
+		Set<Integer> keys = map.keySet();
+
+		for(int i : keys){
+			ret += map.get(i).size();
+		}
+
+		return ret;	
 	}
-	
-	public LinkedList<PhoneEntry> getLongestList() {
-		LinkedList<PhoneEntry> yo = new LinkedList<PhoneEntry>();
-		for(LinkedList<PhoneEntry> ll : data.values())
-			yo = ll.size() > yo.size() ? ll : yo;
-		return yo;
+
+	public int getLongestList(){
+		Set<Integer> keys = map.keySet();
+		int ret = map.get(0).size();
+
+		for(int i : keys){
+			if(map.get(i).size() > ret)
+				ret = map.get(i).size();
+		}
+
+		return ret;	
 	}
-	
-	public String lookup(String name) {
-		return name;
-		
+
+	public int getNumNulls(){
+		Set<Integer> keys = map.keySet();
+		int ret = 0;
+
+		for(int i : keys){
+			if(map.get(i).size() < 0)
+				ret++;
+		}
+
+		return ret;	
 	}
-	
-	
+
+	public String lookup(String name){
+		Set<Integer> keys = map.keySet();
+		String ret = "";
+
+		for(int i : keys){
+			LinkedList<PhoneEntry> list = map.get(i);
+			for(PhoneEntry p : list){
+				if(p.getName().equals(name))
+					return p.getNumber();
+			}
+		}
+
+		return ret;
+	}
+
+	public boolean changeNumber(String name, String number){
+		Set<Integer> keys = map.keySet();
+		String ret = "";
+
+		for(int i : keys){
+			LinkedList<PhoneEntry> list = map.get(i);
+			for(PhoneEntry p : list){
+				if(p.getName().equals(name)){
+					p.setNumber(number);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public String toString(){
+		Set<Integer> keys = map.keySet();
+		String ret = "";
+
+		for(int i : keys){
+			ret += "Bucket: " + i + "\tList: " + map.get(i).toString() + "\n";
+		}
+
+		return ret;	
+	}
+
+	public static void main(String[] args) throws IOException {
+
+		PhoneBook cm = new PhoneBook();
+
+		BufferedReader k = new BufferedReader(new FileReader("hashTables/phoneBook/phone.txt"));
+		while(k.ready()){
+
+			String[] str = k.readLine().split("\t");
+
+			PhoneEntry fred = new PhoneEntry(str[0],  str[1]);
+			cm.add(fred);
+		}
+		k.close();
+
+		System.out.println(cm.toString());
+
+		System.out.println("");
+		System.out.println("Capacity:\t" + cm.getCapacity());
+		System.out.println("Size:\t" + cm.getSize());
+		System.out.println("Longest List:\t" + cm.getLongestList());
+		System.out.println("Lookup Pope:\t" + cm.lookup("Pope"));
+		System.out.println("Change Pope Number to 6098883453\t" + cm.changeNumber("Pope", "6098883453"));
+		System.out.println("Lookup Pope:\t" + cm.lookup("Pope"));
+	}
+
 }
