@@ -24,17 +24,14 @@ public class BinarySearchTree
 	   if(tree == null){
 			tree = new TreeNode(val);
 	   	return tree;
-	   }
-		
+	   }	
 		Comparable treeValue = tree.getValue();
 		int dirTest = val.compareTo(treeValue);
-		
 		
 		if(dirTest <= 0)
 			tree.setLeft(add(val, tree.getLeft()));
 		else if(dirTest > 0)
 			tree.setRight(add(val, tree.getRight()));
-		
 		return tree;
 	}
 
@@ -95,9 +92,11 @@ public class BinarySearchTree
 			revOrder(tree.getLeft());
 		}
 	}
-	
-	
-	
+
+	public TreeNode getRoot() {
+		return root;
+	}
+
 	public void levelOrder(){
 
 		Queue<Comparable> q = new LinkedList<Comparable>();
