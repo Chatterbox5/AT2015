@@ -1,6 +1,5 @@
 package monsters;
-
-public class Monster implements Comparable<Monster>{
+public class Monster implements Comparable{
 
 	private int weight;
 	private int height;
@@ -52,37 +51,36 @@ public class Monster implements Comparable<Monster>{
 		return false;
 
 	}
-
-	public int compareTo( Monster o ){
-	
-		if(height==o.getHeight())
-			return 0;
-		else if(height>o.getHeight())
-			return 1;
-		else if(height<o.getHeight())
-			return -1;
-		else if(weight==o.getHeight())
-			return 0;
-		else if(weight>o.getHeight())
-			return 1;
-		else if(weight<o.getHeight())
-			return -1;
-		else if(age==o.getHeight())
-			return 0;
-		else if(age>o.getHeight())
-			return 1;
-		else if(age<o.getHeight())
-			return -1;
-		return 0;
-	}
-
-
 	public String toString( ){
 		String ret="";
 		ret+=height+" ";
 		ret+=weight+" ";
 		ret+=age;
 		return ret;
+	}
+
+
+	@Override
+	public int compareTo(Object o) {
+		if(height==((Monster) o).getHeight())
+			return 0;
+		else if(height>((Monster) o).getHeight())
+			return 1;
+		else if(height<((Monster) o).getHeight())
+			return -1;
+		else if(weight==((Monster) o).getWeight())
+			return 0;
+		else if(weight>((Monster) o).getWeight())
+			return 1;
+		else if(weight<((Monster) o).getWeight())
+			return -1;
+		else if(age==((Monster) o).getAge())
+			return 0;
+		else if(age>((Monster) o).getAge())
+			return 1;
+		else if(age<((Monster) o).getAge())
+			return -1;
+		return 0;
 	}
 
 }
