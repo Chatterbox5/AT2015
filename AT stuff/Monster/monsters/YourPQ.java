@@ -15,11 +15,11 @@ import java.util.PriorityQueue;
 //Make the PQ an Arraylist, make the arrayList behave as a PQ
 public class YourPQ
 {
-	private Queue pQueue;
+	private ArrayList<Monster> pQueue;
 
 	public YourPQ()
 	{
-		pQueue= new PriorityQueue<Monster>();
+		pQueue= new ArrayList<Monster>();
 	}
 
 	public void add(Monster value) {
@@ -30,29 +30,34 @@ public class YourPQ
 	public void swapUp(int bot) {
 		if (bot > 0) {
 			int parent = (bot - 1) / 2;
-			if (pQueue.peek(parent) < pQueue.peek(bot)) {
+			if (pQueue.get(parent).compareTo(pQueue.get(bot))>0) {
 				swap(parent, bot);
 				swapUp(parent);
 			}
 		}
 	}
 	
+	public void swap(int fir, int sec){
+		Monster bob=pQueue.get(fir);
+		pQueue.set(fir,pQueue.get(sec));
+		pQueue.set(sec,bob);
+	}
+	
 	public Object getMin()
 	{
-		return pQueue.peek();
+		return pQueue.get(0);
 	}
 	
 	public Object removeMin()
 	{
-		return pQueue.remove();
+		return pQueue.remove(0);
 	}
 	
 	public String getNaturalOrder()
 	{
 		String output="";
-
-
-
+		for (int i=0; i<pQueue.size(); i++)
+			output+=pQueue.get(i);
 		return output;		
 	}
 

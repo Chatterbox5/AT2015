@@ -26,11 +26,13 @@ public class Graph
 
 	public boolean contains(String letter)
 	{
-		return true;
+		return map.containsKey(letter);
 	}
 
 	public void check(String first, String second, String placesUsed)
 	{
+		if(placesUsed.contains(second))
+			//true;
 	}
 
 	public String toString()
