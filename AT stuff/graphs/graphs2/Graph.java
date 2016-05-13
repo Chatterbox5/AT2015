@@ -1,4 +1,4 @@
-package graphs1;
+package graphs2;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,6 +10,7 @@ public class Graph
 {
 	private TreeMap<String, TreeSet<String>> map;
 	boolean match = false;
+	int dist=0;
 	
 	public Graph(String line) {
 		map = new TreeMap<String, TreeSet<String>>();
@@ -37,26 +38,43 @@ public class Graph
 		}
 	}
 
-
+	public String match(){
+		if(match)
+			return "true, in "+dist+ " steps";
+		else
+			return "false";
+		
+	}
+	
 	public boolean contains(String letter)
 	{
 		return map.containsKey(letter);
 	}
 
-	public void check(String one, String two, ArrayList<String> been) {
-		if (!match) {
-			if (map.get(one).contains(two))
-				match = true;
-			else {
-				TreeSet<String> set = map.get(one);
-				for (String x : set)
-					if (!been.contains(x)) {
-						been.add(x);
-						check(x, two, been);
-					}
+	public void check(String one, String two, ArrayList<String> been, int steps) {
+		if (map.get(one).contains(two)) {
+			match = true;
+			if (dist == 0 || steps <= dist)
+				dist = steps;
+		} else {
+			TreeSet<String> set = map.get(one);
+			for (String x : set){
+				boolean add = false;
+				if (!been.contains(x)) {
+					add = true;
+					been.add(x);
+					check(x, two, been, steps + 1);
+				}
+				if(add)
+					been.remove(x);
 			}
 		}
+}
+
+	public int getDist() {
+		return dist;
 	}
+
 
 	public String toString()
 	{

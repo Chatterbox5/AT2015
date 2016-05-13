@@ -1,4 +1,4 @@
-package graphs1;
+package graphs2;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +19,8 @@ public class GraphRunner
 			String check = file.nextLine();
 			ArrayList<String> arr = new ArrayList<String>();
 			arr.add(check.substring(0, 1));
-			g.check(check.substring(0, 1), check.substring(1), arr);
-			System.out.println(check.substring(0, 1) + " connects to " + check.substring(1) + " == " + g.match);
+			g.check(check.substring(0, 1), check.substring(1), arr, 1);
+			System.out.println(check.substring(0, 1) + " connects to " + check.substring(1) + " == " + g.match());
 		}
 		file.close();
 	}

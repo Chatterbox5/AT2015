@@ -17,27 +17,25 @@ public class PQRunner
 {
 	public static void main ( String[] args )
 	{
-		YourPQ test = new YourPQ();
 
-		Scanner keyboard=new Scanner(System.in);
-
-
-
-
-		//loop to read in values and instantiate your Objects
-	
-	
-	
-
-
-		System.out.println(test);
-		System.out.println("getMin() - " + test.getMin());
-		System.out.println("removeMin() - " + test.removeMin());		
-		System.out.println(test);
+		MonsterPQ pq = new MonsterPQ();
+		pq.add(new Monster(1, 1, 1));
+		pq.add(new Monster(2, 2, 2));
+		pq.add(new Monster(1, 2, 3));
+		pq.add(new Monster(3, 2, 1));
+		pq.add(new Monster(2, 1, 3));
+		pq.add(new Monster(2, 3, 1));
+		pq.add(new Monster(3, 1, 2));
+		pq.add(new Monster(3, 3, 3));
+		
+		System.out.println(pq);
+		System.out.println("getMin(): "+pq.getMin());
+		System.out.println("removeMin(): "+pq.removeMin());
+		System.out.println(pq);
+		System.out.println("getMin(): "+pq.getMin());
+		System.out.println("removeMin(): "+pq.removeMin());
 		
 		
-		//add more test cases
 		
-			
 	}
 }

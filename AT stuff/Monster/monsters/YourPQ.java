@@ -53,6 +53,31 @@ public class YourPQ
 		return pQueue.remove(0);
 	}
 	
+	public boolean isEmpty(){
+		return pQueue.size() == 0;
+	}
+	
+	public void swapDown(int top) {
+		int root = 0;
+		while(root < pQueue.size()){
+			int left = root*2+1, right = root*2+2;
+			int max = root;
+			if(left < pQueue.size())
+				if(pQueue.get(left).compareTo(pQueue.get(max)) < 0)
+					max = left;
+			if(right < pQueue.size())
+				if(pQueue.get(right).compareTo(pQueue.get(max)) < 0)
+					max = right;
+			
+			if(max > root){
+				swap(max, root);
+				root = max;
+			}
+			else
+				break;
+		}
+	}
+	
 	public String getNaturalOrder()
 	{
 		String output="";
@@ -61,7 +86,9 @@ public class YourPQ
 		return output;		
 	}
 
-	//write a toString method
+	public String toString() {
+		return pQueue.toString();
+	}
 	
 	
 }
